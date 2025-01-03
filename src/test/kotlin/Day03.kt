@@ -10,7 +10,7 @@ private fun spiral() = sequence {
     var (dx, dy) = 0 to 1
     while (true) {
         yield(x to y)
-        if (abs(x) == abs(y) && (x < 0 || y < 0) || (x>=0 && 1==(y-x))) {
+        if (abs(x) == abs(y) && (x < 0 || y < 0) || (x >= 0 && 1 == (y - x))) {
             val tmp = dx
             dx = -dy
             dy = tmp
@@ -20,7 +20,7 @@ private fun spiral() = sequence {
     }
 }
 
-private fun solvePartOne(number: Int) = spiral().take(number).last().let { (a,b) -> abs(a) + abs(b) }
+private fun solvePartOne(number: Int) = spiral().take(number).last().let { (a, b) -> abs(a) + abs(b) }
 private fun solvePartTwo(number: Int): Int {
     val directions = listOf(-1 to -1, -1 to 0, -1 to 1, 0 to -1, 0 to 1, 1 to -1, 1 to 0, 1 to 1)
     val grid = mutableMapOf<Pair<Int, Int>, Int>()
