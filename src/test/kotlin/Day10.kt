@@ -7,22 +7,18 @@ import kotlin.test.assertEquals
 
 private fun knotHash(size: Int, lengths: List<Int>, rounds: Int = 1): List<Int> {
     val list = (0..<size).toMutableList()
-    var currentPosition = 0
-    var skip = 0
+    var (currentPosition, skip) = 0 to 0
     repeat(rounds) {
         lengths.forEach { length ->
-            var end = (currentPosition + length - 1) % list.size
-            val nextPosition = (end + 1 + skip++) % list.size
+            var end = (currentPosition + length - 1).mod(list.size)
+            val nextPosition = (end + 1 + skip++).mod(list.size)
             repeat((length + 1) / 2) {
                 val temp = list[end]
                 list[end] = list[currentPosition]
                 list[currentPosition] = temp
 
-                currentPosition = (currentPosition + 1) % list.size
-                end = when (end) {
-                    0 -> list.size - 1
-                    else -> end - 1
-                }
+                currentPosition = (currentPosition + 1).mod(list.size)
+                end = (end - 1).mod(list.size)
             }
             currentPosition = nextPosition
         }
