@@ -5,25 +5,31 @@ import java.io.File
 import kotlin.streams.toList
 import kotlin.test.assertEquals
 
-private fun knotHash(size: Int, lengths: List<Int>, rounds: Int = 1): List<Int> {
-    val list = (0..<size).toMutableList()
-    var (currentPosition, skip) = 0 to 0
-    repeat(rounds) {
-        lengths.forEach { length ->
-            var end = (currentPosition + length - 1).mod(list.size)
-            val nextPosition = (end + 1 + skip++).mod(list.size)
-            repeat((length + 1) / 2) {
-                val temp = list[end]
-                list[end] = list[currentPosition]
-                list[currentPosition] = temp
+private fun MutableList<Int>.swap(index1: Int, index2: Int) {
+    val temp = this[index2]
+    this[index2] = this[index1]
+    this[index1] = temp
+}
 
-                currentPosition = (currentPosition + 1).mod(list.size)
-                end = (end - 1).mod(list.size)
-            }
-            currentPosition = nextPosition
-        }
+private fun MutableList<Int>.reverse(start: Int, length: Int): Int {
+    var front = start
+    var end = (start + length - 1).mod(size)
+    val nextPosition = (end + 1).mod(size)
+    repeat((length + 1) / 2) {
+        swap(front, end)
+        front = (front + 1).mod(size)
+        end = (end - 1).mod(size)
     }
-    return list
+    return nextPosition
+}
+
+private fun knotHash(size: Int, lengths: List<Int>, rounds: Int = 1): List<Int> {
+    val hash = (0..<size).toMutableList()
+    var (start, skip) = 0 to 0
+    repeat(rounds) {
+        lengths.forEach { start = (hash.reverse(start, it) + skip++).mod(hash.size) }
+    }
+    return hash
 }
 
 private fun solvePartOne(size: Int, input: String) = knotHash(size, input.split(",").map(String::toInt))
