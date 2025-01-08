@@ -1,7 +1,7 @@
-package org.ricall.dayxx
+package org.ricall.day19
 
 import org.junit.jupiter.api.Test
-import org.ricall.dayxx.Direction.DOWN
+import org.ricall.day19.Direction.DOWN
 import java.io.File
 import kotlin.test.assertEquals
 
@@ -41,7 +41,6 @@ private fun solve(input: String): Pair<String, Int> {
                 val next = current + it
                 !visited.contains(next) && characterAt(next) != SPACE
             } ?: error("Cannot find direction out of $current")
-
             SPACE -> return characters.joinToString("") to steps
             else -> characters += characterAt(current)
         }
